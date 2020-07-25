@@ -5,7 +5,7 @@ ECHO Check if file exist
 if exist \\path_to_file\File_Name.csv (
   ECHO CSV File
   REM CSV File
-  "E:\SQL (x86)\Microsoft SQL Server\110\DTS\Binn\DTExec.exe" /File "\\path_to_file\IngestData.dtsx"
+  "path_to_dtsx_executable\SQL (x86)\Microsoft SQL Server\110\DTS\Binn\DTExec.exe" /File "\\path_to_file\IngestData.dtsx"
 
   ECHO Update Table In Bulk
   REM Update Table In Bulk Temp
