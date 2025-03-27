@@ -1,23 +1,43 @@
 @echo off
-REM ECHO without anything following results in ECHO is off
+setlocal enabledelayedexpansion
 
-ECHO Check if file exist
-if exist \\path_to_file\File_Name.csv (
-  ECHO CSV File
+ECHO Check if file exists
+if exist "\\path_to_file\File_Name.csv" (
+  ECHO CSV File found
   REM CSV File
   "path_to_dtsx_executable\SQL (x86)\Microsoft SQL Server\110\DTS\Binn\DTExec.exe" /File "\\path_to_file\IngestData.dtsx"
+  if !errorlevel! neq 0 (
+    ECHO Error executing DTExec
+    exit /b 1
+  )
 
-  ECHO Update Table In Bulk
+  ECHO Updating Table In Bulk
   REM Update Table In Bulk Temp
-  sqlcmd -S <Server_Name> -d <Database_Name> -Q "exec [dbo].[<Stored_Procedure_Name>] @optionMode = '<Option_Mode_Name>'"
+  sqlcmd -S "<Server_Name>" -d "<Database_Name>" -Q "exec [dbo].[<Stored_Procedure_Name>] @optionMode = '<Option_Mode_Name>'"
+  if !errorlevel! neq 0 (
+    ECHO Error updating table
+    exit /b 1
+  )
 
-  ECHO Insert Table In Bulk
+  ECHO Inserting Table In Bulk
   REM Insert Table In Bulk
-  sqlcmd -S <Server_Name> -d <Database_Name> -Q "exec [dbo].[<Stored_Procedure_Name>] @optionMode = '<Option_Mode_Name>'"
+  sqlcmd -S "<Server_Name>" -d "<Database_Name>" -Q "exec [dbo].[<Stored_Procedure_Name>] @optionMode = '<Option_Mode_Name>'"
+  if !errorlevel! neq 0 (
+    ECHO Error inserting table
+    exit /b 1
+  )
 
-  ECHO Delete CSV file
+  ECHO Deleting CSV file
   REM Delete CSV file
-  del \\path_to_file\File_Name.csv
+  del "\\path_to_file\File_Name.csv"
+  if !errorlevel! neq 0 (
+    ECHO Error deleting CSV file
+    exit /b 1
+  )
+) else (
+  ECHO CSV File not found
+  exit /b 1
 )
 
-REM pause
+ECHO Script completed successfully
+exit /b 0
