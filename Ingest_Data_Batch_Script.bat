@@ -1,4 +1,6 @@
 @echo off
+REM ECHO without anything following results in ECHO is off
+
 setlocal enabledelayedexpansion
 
 ECHO Check if file exists
@@ -40,4 +42,6 @@ if exist "\\path_to_file\File_Name.csv" (
 )
 
 ECHO Script completed successfully
+REM Uncomment the pause line below if you want to see the output of the executions above in the terminal before it disappears
+REM pause
 exit /b 0
